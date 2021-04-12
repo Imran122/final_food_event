@@ -11,8 +11,7 @@ services:
     command: >
       sh -c "python manage.py wait_for_db &&
             python manage.py makemigrations &&
-
-            python manage.py runserver 0.0.0.0:8000"
+              python manage.py runserver 0.0.0.0:8000"
     environment: 
       - DB_HOST=db
       - DB_NAME=app
@@ -27,27 +26,3 @@ services:
     - POSTGRES_DB=app
     - POSTGRES_USER=postgres
     - POSTGRES_PASSWORD=supersecretpassword
-    ports:
-      - "5433:5433"
-
-  redis:
-    image: redis:alpine
-    command: ["redis-server", "--bind", "redis", "--port", "6379"]
-    expose: 
-      - "6379"
-  celery:
-    restart: always
-    build:
-      context: .
-    command: celery -A app worker -l info
-    volumes:
-      - ./app:/app
-    environment:
-      - DB_HOST=db
-      - DB_NAME=app
-      - DB_USER=postgres
-      - DB_PASS=supersecretpassword
-    depends_on:
-      - db
-      - redis
-      - app

@@ -7,6 +7,7 @@ django-static-jquery>=2.1.4
 python-memcached
 gunicorn==20.0.4
 whitenoise==5.2.0
+setuptools==50.3.0
 
 redis
 celery
@@ -15,4 +16,3 @@ celery[redis]
 django-celery-results
 django-celery-beat
 stripe==2.50.0
-django-sslserver

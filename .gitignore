@@ -50,7 +50,14 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+.cache
+*.pyc
+!**/__pycache__/
+*/*/*/__pycache__/
 
+*/*/__pycache__/
+
+*/__pycache__/
 # Translations
 *.mo
 *.pot
@@ -60,7 +67,13 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+**/**/migrations
+**/migrations/
+_migrations/*
+!_migrations/__init__.py
 # Flask stuff:
 instance/
 .webassets-cache
@@ -113,7 +126,8 @@ venv.bak/
 # Spyder project settings
 .spyderproject
 .spyproject
-
+.staticfiles
+staticfiles
 # Rope project settings
 .ropeproject
 

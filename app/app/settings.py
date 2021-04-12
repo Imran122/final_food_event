@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'recipes',
     'django_celery_beat',
     'django_celery_results',
-    'sslserver'
+    
     
 ]
 

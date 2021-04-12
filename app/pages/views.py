@@ -7,7 +7,7 @@ import re
 from decimal import Decimal
 from random import seed, randint
 from recipes.models import *
-
+from accounts.models import UserProfile
 from recipes.models import Events,RecipeOverview
 from recipes.services import *
 from datetime import date, datetime, timedelta 
@@ -62,7 +62,10 @@ def mealplan_view(request):
     return render(request, 'pages/mealPlanView.html', context)
 
 def dashboard(request):
-    
+    try:
+        profile1 = UserProfile.objects.get(user=request.user)
+    except User.DoesNotExist:
+        profile1 = None       
     #importRecipe = SyncRecipes.sync_json_from_local()
     #print(importRecipe)
     SyncRecipes.sync_recipes_with_files()
@@ -117,6 +120,7 @@ def dashboard(request):
     
     
     context = {
+        'profile1':profile1,
         'breakfast': breakfast,
         'morningSnack': morningSnack,
         'lunch': lunch,
