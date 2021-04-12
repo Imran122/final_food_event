@@ -370,120 +370,102 @@ $('#paynowbtn').on('click',function(event){
 
 
 <!-- end of stripe payment -->
+<!--controling payment option view -->
 
+<!-- end of payment option view -->
+
+<!-- session for paypal dynamic price selection -->
+
+<script type="text/javascript">
+var priceofpkg=''
+var pkgs='' ;
+  $('#membership').change(function(){
+    pkgs=$('#membership').val();
+    document.cookie="package="+pkgs+";path=/";
+
+    if($('#membership').val()=='MONTHLY'){
+      priceofpkg = 3.0
+    } else if($('#membership').val()=='YEARLY'){
+      priceofpkg = 30.0
+    }
+
+  });
+  
+</script>
+
+<!-- paypal payment setup starts here -->
 
 <!-- Replace client-id with your own client id -->
-<script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script> 
 
 
-    <script>
-      // Listen for changes to the radio fields
-      document.querySelectorAll('input[name=payment_method_type]').forEach(function (el) {
-        el.addEventListener('change', function (event) {
-
-          // If PayPal is selected, show the PayPal button
-          console.log(event.target.value)
-          if (event.target.value === 'paypal') {
-            document.querySelector('#paypal-button-container').style.display = 'inline-block';
-            
-          }
-          if (event.target.value==="card"){
-            document.querySelector('#paypal-button-container').style.display = 'none';
-            
-          }
-
-          // If Card is selected, show the standard continue button
-        });
-      });
-      
-
-        
-        
-        function PaymentType(value){
-          if (value==="MONTHLY"){
-            return '3.00'
-          }
-          else if (value === "YEARLY") {
-            return '30.00'
-          }
-          else{
-            alert('Select a plan')
-          }
-        }
-
-      // Render the PayPal button into #paypal-button-container
+<div id="smart-button-container" >
+      <div style="text-align: center;">
+        <div id="ppaypal-button-container"></div>
+      </div>
+    </div>
+  <script src="https://www.paypal.com/sdk/js?client-id=Aabpaa-uFY9UOWzSVYU-zsqFtqKKIn7DrZoPHy4Hepn4inHllLQyaFvWlrXQMk0_RMUZxAfJRXlmlvj5&currency=USD" data-sdk-integration-source="button-factory"></script>
+  <script>
+    function initPayPalButton() {
       paypal.Buttons({
-
-        // createSubscription: function (data, actions) {
-        //    membership = $('#membership option:selected').val();
-        //   if (updatedSubscription && (status === 'ACTIVE' || status === 'SUSPENDED')) {
-        //     return actions.subscription.revise(subscriptionId, {
-        //       'shipping_amount': {
-        //         'currency_code': 'USD',
-        //         'value': PaymentType(membership)
-        //       }
-        //     });
-        //   } else {
-        //     return actions.subscription.create({
-        //       'plan_id': 'P-2UF78835G6983425GLSM44MA'
-        //     });
-        //   }
-        // },
-        
-
-
-         createOrder: function (data, actions) {
-          membership = $('#membership option:selected').val()
-
-          return actions.order.create({
-            purchase_units: [{
-              amount: {
-                value: PaymentType(membership)
-              }
-            }]
-          });
-        },
-
-        // Finalize the transaction
-        onApprove: function (data, actions) {
-          return actions.order.capture().then(function (details) {
-            // Show a success message to the buyer
-            alert('Transaction completed by ' + details.payer.name.given_name + '!');
-            
-            var form = document.getElementById('payment-form')
-            var membership = document.createElement('input')
-            membership.setAttribute('type', 'hidden')
-            membership.setAttribute('name', 'membership')
-            membership.setAttribute('required', true)
-            membership.setAttribute('value', $('#membership option:selected').val() )
-
-            var paypal_payment = document.createElement('input')
-            paypal_payment.setAttribute('type', 'hidden')
-            paypal_payment.setAttribute('required', true)
-            paypal_payment.setAttribute('name', 'paypal-payment')
-            paypal_payment.setAttribute('value', details.id)
-
-            var payment_method_type = document.createElement('input')
-            hiddenInput.setAttribute('type', 'hidden ')
-            hiddenInput.setAttribute('name', 'payment_method_type')
-            hiddenInput.setAttribute('value', 'paypal')
-
-            form.appendChild(membership)
-            form.appendChild(payment_method_type)
-            form.appendChild(paypal_payment)
-
-            form.submit()
-
-
-          });
-        },
-
         style: {
-          layout: 'horizontal'
+          shape: 'pill',
+          color: 'blue',
+          layout: 'vertical',
+          label: 'paypal',
+
+          
+        },
+
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{"description":"food order","amount":{"currency_code":"USD","value":priceofpkg}}]
+          });
+        },
+
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            if (details.status=='COMPLETED'){
+
+              
+              window.location.href='/accounts/paypal-payment-success/?paymentid='+details.id
+            }
+          });
+        },
+
+        onError: function(err) {
+          console.log(err);
         }
       }).render('#paypal-button-container');
-     
-    </script>
+    }
+    initPayPalButton();
+  </script>
+
+
+
+
+
+
+<!-- paypal payment setup ends here -->
+
+
+<script type="text/javascript">
+
+$('#paynowbtn').hide();
+
+$('input[type=radio][name=payment_method_type]').change(function() {
+    if (this.value == 'paypal') {
+        $('#paynowbtn').hide();
+        $('#paypal-button-container').show()
+    }
+    else if (this.value == 'card') {
+        $('#paypal-button-container').hide();
+        $('#paynowbtn').show()
+    }
+});
+
+  //$('#paypal-button-container').hide();
+   
+</script>
 {% endblock %}
 
 
