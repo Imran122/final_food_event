@@ -343,6 +343,8 @@
                       </div>
                     </div>
                   </li>
+
+                    {% if user.is_authenticated %}
                   <li class="nav-item dropdown dropdown-animate">
                     <a class="nav-link pr-lg-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <div class="media media-pill align-items-center">
@@ -350,12 +352,13 @@
                           <img alt="Image placeholder" src="{% static 'img/theme/light/team-4-800x800.jpg' %}">
                         </span>
                         <div class="ml-2 d-none d-lg-block">
-                          <span class="mb-0 text-sm  font-weight-bold">John Snow</span>
+                       
+                          <span class="mb-0 text-sm  font-weight-bold">{{ user.name }}</span>
                         </div>
                       </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right dropdown-menu-arrow">
-                      <h6 class="dropdown-header px-0">Hi, John!</h6>
+                      <h6 class="dropdown-header px-0">Hi, {{ user.name }}!</h6>
                       <a href="#!" class="dropdown-item">
                         <i class="fas fa-user"></i>
                         <span>My profile</span>
@@ -379,6 +382,8 @@
                       </a>
                     </div>
                   </li>
+               {% endif %}
+
                 </ul>
               </div>
             </div>
