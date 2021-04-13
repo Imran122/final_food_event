@@ -150,11 +150,12 @@ def payment_success(request):
 @login_required()
 def paypal_payment_success(request):
   pkg=request.COOKIES['package']
+  
   identify=request.GET['paymentid']
   if identify == '':
     return redirect('dashboard')
   sel_user_profile = UserProfile.objects.get(user=request.user)
-  if pkg == 'MONTHLY' :
+  if pkg == 'MONTHLY':
           sel_user_profile.subscription_type = 'M'
           sel_user_profile.expire_date = datetime.now()+timedelta(days=30)
           sel_user_profile.save()
@@ -165,3 +166,9 @@ def paypal_payment_success(request):
     sel_user_profile.save()
 
   return render(request,'accounts/payment-success.html')
+
+
+
+def logout(request):
+  auth.logout(request)
+  return redirect('login')

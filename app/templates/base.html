@@ -206,7 +206,7 @@
                         <span>Orders</span>
                       </a>
                       <div class="dropdown-divider"></div>
-                      <a href="../application/authentication/login.html" class="dropdown-item">
+                      <a href="{% url 'logout' %}" class="dropdown-item">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Logout</span>
                       </a>
@@ -241,6 +241,8 @@
                       Recipe Search
                     </a>
                   </li>
+                  {% if usercheck %}
+                  {% if usercheck == 1 %}
                   <li class="nav-item ">
                     <a class="nav-link pl-lg-0" href="/mealplanview/">
                       Meal Plan View
@@ -250,6 +252,9 @@
                     <a class="nav-link pl-lg-0" href="/plan-create/">
                       Click To Create Meal Plan (Try it once or twice)                    </a>
                   </li>
+                  {% endif %}
+
+                  {% endif %}
                   
                   <li class="border-top opacity-2 my-2"></li>
                   <!-- Docs menu -->
@@ -376,7 +381,7 @@
                         <span>Activity</span>
                       </a>
                       <div class="dropdown-divider"></div>
-                      <a href="#!" class="dropdown-item">
+                      <a href="{% url 'logout' %}" class="dropdown-item">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Logout</span>
                       </a>

@@ -11,8 +11,7 @@ from accounts.models import UserProfile
 from recipes.models import Events,RecipeOverview
 from recipes.services import *
 from datetime import date, datetime, timedelta 
-
-
+from django.utils import timezone
 
 def plan_create(request):
     
@@ -63,7 +62,12 @@ def mealplan_view(request):
 
 def dashboard(request):
     try:
+        notmember=1
         profile1 = UserProfile.objects.get(user=request.user)
+        if profile1.expire_date < timezone.now():
+            notmember=0
+
+
     except User.DoesNotExist:
         profile1 = None       
     #importRecipe = SyncRecipes.sync_json_from_local()
@@ -137,7 +141,8 @@ def dashboard(request):
         'dinnerIngredients': dinnerIngredients,
         'dinnerDirections': dinnerDirections,
         #'feedbackEvent': feedbackEvent,
-        'shoppingLists':shoppingLists
+        'shoppingLists':shoppingLists,
+        'usercheck':notmember,
     }
 
     
